@@ -6,9 +6,9 @@ export default function Header() {
   return (
     <header className="w-full flex justify-between items-center px-6 py-2">
       <div className="logo">
-        <img src={logo} className="w-32" alt="Logo" />
+        <img src={logo} className="w-[20%]" alt="Logo" />
       </div>
-      <Btn text={"Login"}/>
+      <Btn text={"Login"} link="/login" />
     </header>
   );
 }

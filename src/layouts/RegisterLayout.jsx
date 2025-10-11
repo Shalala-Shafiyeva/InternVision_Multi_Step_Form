@@ -13,7 +13,7 @@ export default function RegisterLayout() {
         <Header />
         <div className="flex w-full h-full border">
           <ProgressBar />
-          <div className="mx-4 mb-4 px-4 py-6 flex-1 h-hull">
+          <div className="mx-4 mb-4 px-4 py-6 flex-1 h-hull text-white">
             <Outlet />
           </div>
         </div>

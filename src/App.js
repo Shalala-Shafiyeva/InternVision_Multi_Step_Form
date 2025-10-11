@@ -10,15 +10,9 @@ import UserPhoto from './pages/UserPhoto';
 
 function App() {
   return (
-    // <div className="w-full min-h-[100vh] bg-main-bg bg-no-repeat bg-cover bg-center blur-md flex justify-center items-center">
-    //   <div className='modal w-[50%] h-[50%] bg-black z-10' >
-    //     hello
-    //   </div>
-    // </div>
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<RegisterLayout />}>
-        {/* <Route path="register" element={<Register />} /> */}
         <Route path="personal-info" element={<PersonalInfo />} />
         <Route path="education" element={<Education />} />
         <Route path="languages" element={<Languages />} />
