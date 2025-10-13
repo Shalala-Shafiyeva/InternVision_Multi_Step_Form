@@ -1,7 +1,9 @@
 import Btn from "../components/common/Btn";
 import { ReactComponent as NextIcon } from "../assets/icons/arrow.svg";
-import { ReactComponent as EducationIcon } from "../assets/icons/education.svg";
-import { useMemo } from "react";
+import { ReactComponent as ChevronIcon } from "../assets/icons/chevron.svg";
+import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg";
+import { ReactComponent as CloseIcon } from "../assets/icons/close.svg";
+import { useMemo, useState } from "react";
 
 export default function Education() {
   //   {
@@ -36,7 +38,10 @@ export default function Education() {
   ];
   const typeOptions = ["School", "College", "University", "Vocational"];
   const yearOptions = useMemo(() => generateYearOptions(60), []);
-  const inputClasses = ("py-2 px-4 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300");
+  const [isCurrent, setIsCurrent] = useState(false);
+  const [education, setEducation] = useState([{}]);
+  const inputClasses =
+    "py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300";
   const labelClasses = "font-medium text-blue-300";
 
   const FormInput = ({
@@ -47,25 +52,30 @@ export default function Education() {
     onChange,
     options,
     placeholder,
+    disabled,
   }) => (
-    <div className="form-inp flex flex-col gap-2 flex-1">
+    <div className="form-inp flex flex-col gap-2 flex-1 relative">
       <label htmlFor={name} className={labelClasses}>
         {label}
       </label>
       {type === "select" ? (
-        <select
-          id={name}
-          name={name}
-          value={value}
-          onChange={onChange}
-          className={inputClasses + " appearance-none cursor-pointer"}
-        >
-          {options?.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
+        <>
+          <ChevronIcon className="w-4 h-4 absolute right-4 top-1/2 translate-y-1/2" />
+          <select
+            id={name}
+            name={name}
+            value={value}
+            onChange={onChange}
+            className={inputClasses + " appearance-none cursor-pointer"}
+            disabled={disabled}
+          >
+            {options?.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+        </>
       ) : (
         <input
           type={type}
@@ -80,6 +90,18 @@ export default function Education() {
     </div>
   );
 
+  const handleCurrentChange = (e) => {
+    setIsCurrent(e.target.checked);
+  };
+
+  const handleAddEducationItem = () => {
+    setEducation((prev) => [...prev, {}]);
+  };
+
+  const handleRemoveEducationItem = (index) => {
+    setEducation((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="personal_info flex flex-col gap-6">
       <div className="head flex flex-col gap-6">
@@ -90,124 +112,99 @@ export default function Education() {
       </div>
       <div className="form">
         <form action="" className="flex flex-col gap-4">
-          {/* <div className="form-group flex justify-between items-center gap-2">
-            <div className="form-inp flex flex-col gap-2">
-              <label htmlFor="firstName" className="font-medium text-blue-300">
-                Type
-              </label>
-              <select
-                type="text"
-                id="firstName"
-                className="py-2 px-4 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300"
-                placeholder="First name"
-              >
-                <option value="School">School</option>
-                <option value="University">University</option>
-                <option value="College">College</option>
-              </select>
-            </div>
-            <div className="form-inp flex flex-col gap-2">
-              <label htmlFor="firstName" className="font-medium text-blue-300">
-                Name
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                className="py-2 px-4 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300"
-                placeholder="First name"
-              />
-            </div>
-            <div className="form-inp flex flex-col gap-2">
-              <label htmlFor="firstName" className="font-medium text-blue-300">
-                Degree
-              </label>
-              <select
-                type="text"
-                id="firstName"
-                className="py-2 px-4 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300"
-                placeholder="First name"
-              >
-                <option value="High School">High School</option>
-                <option value="Bachelors">Bachelors</option>
-                <option value="Masters">Masters</option>
-                <option value="PhD">PhD</option>
-              </select>
-            </div>
-            <div className="form-inp"></div>
-          </div> */}
-          <div className="form-group grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <FormInput
-              label="Type"
-              name="type"
-              type="select"
-              options={typeOptions}
-            />
-            <FormInput
-              label="Name"
-              name="name"
-              type="text"
-              placeholder="Например, Оксфордский Университет"
-            />
-
-            {/* Степень */}
-            <FormInput
-              label="Degree"
-              name="degree"
-              type="select"
-              options={degreeOptions}
-            />
-          </div>
-
-          {/* --- 2. ГОДЫ ОБУЧЕНИЯ И ЧЕКБОКС --- */}
-          <div className="form-group grid grid-cols-2 sm:grid-cols-4 gap-4 items-end">
-            {/* Год Зачисления */}
-            <FormInput
-              label="Year of Admission"
-              name="startYear"
-              type="select"
-              // options={yearOptions}
-            />
-
-            {/* Год Окончания (Динамический) */}
-            {/* {!formData.isCurrent && ( */}
-            <FormInput
-              label="Graduation Year"
-              name="endYear"
-              type="select"
-              // options={yearOptions.filter((y) => y >= formData.startYear)} // Год окончания >= года начала
-            />
-            {/* )} */}
-
-            {/* Чекбокс "Учусь в настоящее время" */}
-            <div
-              className={`form-inp flex flex-col justify-end ${
-                ""
-                // formData.isCurrent
-                //   ? "col-span-3 sm:col-span-2"
-                //   : "col-span-2 sm:col-span-1"
-              } h-full`}
+          <div className="add_btn">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleAddEducationItem();
+              }}
+              className="w-[max-content] py-2 px-8 rounded-[32px] flex items-center gap-2 text-rose-100 bg-blue-700 border border-blue-700 hover:bg-blue-600 transition-all duration-200 ease-in-out"
             >
-              <label className="flex items-center space-x-2 p-3 bg-blue-50 dark:bg-neutral-700/50 rounded-xl cursor-pointer transition hover:shadow-md">
-                <input
-                  type="checkbox"
-                  name="isCurrent"
-                  // checked={formData.isCurrent}
-                  // onChange={handleCurrentChange}
-                  className="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <span className="text-sm font-medium text-gray-900 dark:text-white select-none">
-                  Учусь в настоящее время
-                </span>
-              </label>
-            </div>
+              <PlusIcon className="w-4 h-4" />
+              <span className="text-sm">Add</span>
+            </button>
           </div>
+          {education?.map((edu, i) => (
+            <div className="box-cover flex flex-col gap-4 border border-blue-700 p-4 rounded-xl bg-black/20 relative">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleRemoveEducationItem(i);
+                }}
+              >
+                <CloseIcon className="w-4 h-4 absolute top-2 right-2 cursor-pointer" />
+              </button>
+              <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormInput
+                  label="Type"
+                  name="type"
+                  type="select"
+                  options={typeOptions}
+                />
+                <FormInput
+                  label="Name"
+                  name="name"
+                  type="text"
+                  placeholder="For example, Harvard University"
+                />
+              </div>
+              <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Степень */}
+                <FormInput
+                  label="Degree"
+                  name="degree"
+                  type="select"
+                  options={degreeOptions}
+                />
+              </div>
+
+              {/* --- 2. ГОДЫ ОБУЧЕНИЯ И ЧЕКБОКС --- */}
+              <div className="form-group grid grid-cols-2 sm:grid-cols-3 gap-4 items-end">
+                {/* Год Зачисления */}
+                <FormInput
+                  label="Year of Admission"
+                  name="startYear"
+                  type="select"
+                  options={yearOptions}
+                />
+
+                {/* Год Окончания (Динамический) */}
+
+                <FormInput
+                  label="Graduation Year"
+                  name="endYear"
+                  type="select"
+                  options={yearOptions}
+                  disabled={isCurrent}
+                />
+
+                {/* Чекбокс "Учусь в настоящее время" */}
+                <div className={`form-inp flex flex-col justify-end h-full`}>
+                  <label className="flex items-center space-x-2 p-3 bg-blue-50 dark:bg-neutral-700/50 rounded-xl cursor-pointer transition hover:shadow-md">
+                    <input
+                      type="checkbox"
+                      name="isCurrent"
+                      checked={isCurrent}
+                      onChange={handleCurrentChange}
+                      className="w-4 h-4"
+                    />
+                    <span className="text-sm font-medium text-gray-900 dark:text-white select-none">
+                      Keep studing
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          ))}
         </form>
       </div>
       <div className="btn mt-8 flex justify-end">
         <Btn
           text={"Next"}
           icon={<NextIcon className="w-4 h-4" />}
-          link="/register/languages"
+          // link="/register/languages"
+          link="/register/experience"
         />
       </div>
     </div>

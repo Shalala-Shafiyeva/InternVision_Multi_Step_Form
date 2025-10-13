@@ -7,9 +7,9 @@ import { Outlet } from "react-router-dom";
 }
 export default function RegisterLayout() {
   return (
-    <div className="relative w-full min-h-[100vh] flex justify-center items-center">
+    <div className="relative w-full min-h-[100vh] flex justify-center items-center py-[5%]">
       <div className="absolute inset-0 bg-main-bg bg-no-repeat bg-cover bg-center blur-md"></div>
-      <div className="flex flex-col w-[50%] min-h-[50%] z-10 rounded-xl bg-white/20 border-4 border-white/10">
+      <div className="flex flex-col w-[50%] min-h-[60vh] z-10 rounded-xl bg-white/20 border-4 border-white/10">
         <Header />
         <div className="flex w-full h-full border">
           <ProgressBar />
