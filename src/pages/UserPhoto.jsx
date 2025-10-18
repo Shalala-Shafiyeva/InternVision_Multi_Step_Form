@@ -65,7 +65,13 @@ export default function UserPhoto() {
               </p>
             )}
           </div>
-          <div className="btn mt-8 flex justify-end">
+          <div className="btn mt-8 flex justify-end gap-2">
+            <Btn
+              text={"Back"}
+              icon={<NextIcon className="w-4 h-4" />}
+              link="/register/experience"
+              rotate={true}
+            />
             <Btn text={"Submit"} />
           </div>
         </form>
