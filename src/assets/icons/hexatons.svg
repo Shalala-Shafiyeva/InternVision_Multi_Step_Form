@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 200" role="img" aria-label="Chain of four hexagons with small gaps">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1">
+      <stop offset="0" stop-color="#4f46e5"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+    <filter id="f1" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- фон -->
+  <rect width="100%" height="100%" fill="transparent"/>
+
+  <!-- Немного увеличенные отступы по горизонтали (~10px между гранями) -->
+  <!-- центры: (60,80), (130,68.5), (200,91.5), (270,68.5) -->
+
+  <!-- hex 1 -->
+  <polygon
+    filter="url(#f1)"
+    points="20,80 40,45.36 80,45.36 100,80 80,114.64 40,114.64"
+    fill="url(#g1)"
+    stroke="#0ea5a4"
+    stroke-width="2"
+    stroke-linejoin="round"
+    opacity="0.98"
+  />
+
+  <!-- hex 2 -->
+  <polygon
+    filter="url(#f1)"
+    points="90,68.5 110,33.86 150,33.86 170,68.5 150,103.14 110,103.14"
+    fill="#10b981"
+    stroke="#059669"
+    stroke-width="2"
+    stroke-linejoin="round"
+    opacity="0.98"
+  />
+
+  <!-- hex 3 -->
+  <polygon
+    filter="url(#f1)"
+    points="160,91.5 180,57 220,57 240,91.5 220,126 180,126"
+    fill="#f59e0b"
+    stroke="#d97706"
+    stroke-width="2"
+    stroke-linejoin="round"
+    opacity="0.98"
+  />
+
+  <!-- hex 4 -->
+  <polygon
+    filter="url(#f1)"
+    points="230,68.5 250,33.86 290,33.86 310,68.5 290,103.14 250,103.14"
+    fill="#ef4444"
+    stroke="#b91c1c"
+    stroke-width="2"
+    stroke-linejoin="round"
+    opacity="0.98"
+  />
+</svg>

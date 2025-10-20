@@ -24,10 +24,10 @@ export default function Education() {
     register,
     control,
     handleSubmit,
-    watch,
-    setValue,
     formState: { errors, isSubmitting, isValid },
   } = useForm({
+    mode: "onChange",
+    criteriaMode: "all",
     defaultValues: {
       education:
         formData.education.length > 0
@@ -126,7 +126,7 @@ export default function Education() {
               </button>
             )}
 
-            <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
               <div className="flex flex-col gap-2">
                 <label className="text-blue-300 font-medium">Type</label>
                 <div className="relative">
@@ -134,8 +134,9 @@ export default function Education() {
                     {...register(`education.${index}.type`, {
                       required: "Type is required",
                     })}
-                    className={`appearance-none relative w-full py-2 ps-4 pe-8 outline-none border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 ${
-                      errors.education?.[index]?.type && "border-red-500"
+                    className={`appearance-none relative focus:ring focus:ring-blue-300 w-full py-2 ps-4 pe-8 outline-none border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 ${
+                      errors.education?.[index]?.type &&
+                      "border-red-500 focus:ring-red-300"
                     }`}
                   >
                     <option value="">Select type</option>
@@ -161,7 +162,7 @@ export default function Education() {
                     required: "Name is required",
                   })}
                   placeholder="For example, Harvard University"
-                  className={`py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 ${
+                  className={`py-2 ps-4 pe-8 border focus:ring focus:ring-blue-300 outline-none border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 ${
                     errors.education?.[index]?.name &&
                     "border-red-500 focus:ring-red-300"
                   }`}
@@ -174,7 +175,7 @@ export default function Education() {
               </div>
             </div>
 
-            <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
               <div className="flex flex-col gap-2">
                 <label className="text-blue-300 font-medium">Degree</label>
                 <div className="relative">
@@ -182,8 +183,9 @@ export default function Education() {
                     {...register(`education.${index}.degree`, {
                       required: "Degree is required",
                     })}
-                    className={`appearance-none relative py-2 ps-4 pe-8 w-full border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 ${
-                      errors.education?.[index]?.degree && "border-red-500"
+                    className={`appearance-none relative focus:ring focus:ring-blue-300 outline-none py-2 ps-4 pe-8 w-full border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 ${
+                      errors.education?.[index]?.degree &&
+                      "border-red-500 focus:ring-red-300"
                     }`}
                   >
                     <option value="">Select degree</option>
@@ -203,7 +205,7 @@ export default function Education() {
               </div>
             </div>
 
-            <div className="form-group grid grid-cols-2 sm:grid-cols-3 gap-4 items-end">
+            <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
               <div className="flex flex-col gap-2">
                 <label className="text-blue-300 font-medium">
                   Year of Admission
@@ -213,8 +215,9 @@ export default function Education() {
                     {...register(`education.${index}.startYear`, {
                       required: "Year of admission is required",
                     })}
-                    className={`appearance-none w-full py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 ${
-                      errors.education?.[index]?.startYear && "border-red-500"
+                    className={`appearance-none outline-none focus:ring focus:ring-blue-300 w-full py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 ${
+                      errors.education?.[index]?.startYear &&
+                      "border-red-500 focus:ring-red-300"
                     }`}
                   >
                     <option value="">Select year</option>
@@ -241,9 +244,18 @@ export default function Education() {
                   <select
                     {...register(`education.${index}.endYear`, {
                       required: "Graduation year is required",
+                      validate: (value, allValues) => {
+                        const start = allValues.education[index].startYear;
+                        if (!value) return "Graduation year is required";
+                        if (start && Number(value) < Number(start)) {
+                          return "Graduation year cannot be earlier than start year";
+                        }
+                        return true;
+                      },
                     })}
-                    className={`appearance-none w-full py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 disabled:opacity-50 ${
-                      errors.education?.[index]?.endYear && "border-red-500"
+                    className={`appearance-none outline-none focus:ring focus:ring-blue-300 w-full py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 disabled:opacity-50 ${
+                      errors.education?.[index]?.endYear &&
+                      "border-red-500 focus:ring-red-300"
                     }`}
                   >
                     <option value="">Select year</option>
@@ -275,7 +287,7 @@ export default function Education() {
           <button
             type="submit"
             disabled={!isValid || isSubmitting}
-            className={`w-[max-content] py-2 px-8 rounded-[32px] flex items-center gap-2 text-rose-100 border border-blue-700 transition-all duration-200 ease-in-out ${
+            className={`w-[max-content] py-2 px-8 text-xs md:text-md rounded-[32px] flex items-center gap-2 text-rose-100 border border-blue-700 transition-all duration-200 ease-in-out ${
               !isValid
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-blue-700 hover:bg-blue-600"

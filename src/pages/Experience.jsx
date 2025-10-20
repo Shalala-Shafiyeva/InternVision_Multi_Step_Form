@@ -15,10 +15,10 @@ export default function Experience() {
     register,
     control,
     handleSubmit,
-    watch,
-    setValue,
     formState: { errors, isSubmitting, isValid },
   } = useForm({
+    mode: "onChange",
+    criteriaMode: "all",
     defaultValues: {
       experience:
         formData.experience.length > 0
@@ -73,11 +73,7 @@ export default function Experience() {
         </span>
       </div>
       <div className="form">
-        <form
-          action=""
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="add_btn">
             <button
               onClick={() =>
@@ -109,7 +105,7 @@ export default function Experience() {
                   <CloseIcon className="w-4 h-4 cursor-pointer" />
                 </button>
               )}
-              <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
                 <div className="form-inp flex flex-col gap-2 flex-1">
                   <label
                     htmlFor="company"
@@ -121,7 +117,10 @@ export default function Experience() {
                     type="text"
                     id="company"
                     name="company"
-                    className="py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300"
+                    className={`py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300 ${
+                      errors.experience?.[index]?.company &&
+                      "border-red-500 focus:ring-red-300"
+                    }`}
                     placeholder="Enter company name"
                     {...register(`experience.${index}.company`, {
                       required: "Company is required",
@@ -144,7 +143,10 @@ export default function Experience() {
                     type="text"
                     id="department"
                     name="department"
-                    className="py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300"
+                    className={`py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300 ${
+                      errors.experience?.[index]?.department &&
+                      "border-red-500 focus:ring-red-300"
+                    }`}
                     placeholder="Enter department name"
                     {...register(`experience.${index}.department`, {
                       required: "Department is required",
@@ -157,7 +159,7 @@ export default function Experience() {
                   )}
                 </div>
               </div>
-              <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
                 <div className="form-inp flex flex-col gap-2 flex-1">
                   <label
                     htmlFor="position"
@@ -169,7 +171,10 @@ export default function Experience() {
                     type="text"
                     id="position"
                     name="position"
-                    className="py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300"
+                    className={`py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] focus:ring focus:ring-blue-300 outline-none placeholder:text-blue-300 placeholder:text-opacity-50 text-blue-300 ${
+                      errors.experience?.[index]?.position &&
+                      "border-red-500 focus:ring-red-300"
+                    }`}
                     placeholder="Enter position name"
                     {...register(`experience.${index}.position`, {
                       required: "Position is required",
@@ -182,8 +187,8 @@ export default function Experience() {
                   )}
                 </div>
               </div>
-              <div className="form-group grid grid-cols-2 sm:grid-cols-3 gap-4 items-end">
-                <div className="flex flex-col gap-2">
+              <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+                <div className="form-inp flex flex-col gap-2">
                   <label className="text-blue-300 font-medium">
                     Start year
                   </label>
@@ -192,7 +197,10 @@ export default function Experience() {
                       {...register(`experience.${index}.startYear`, {
                         required: "Start year is required",
                       })}
-                      className="appearance-none w-full py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300"
+                      className={`appearance-none outline-none focus:ring focus:ring-blue-300 w-full py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 ${
+                        errors.experience?.[index]?.startYear &&
+                        "border-red-500 focus:ring-red-300"
+                      }`}
                     >
                       <option value="">Select year</option>
                       {yearOptions.map((year) => (
@@ -209,15 +217,25 @@ export default function Experience() {
                     </div>
                   )}
                 </div>
-
-                <div className="flex flex-col gap-2">
+                <div className="form-inp flex flex-col gap-2">
                   <label className="text-blue-300 font-medium">End Year</label>
                   <div className="relative">
                     <select
                       {...register(`experience.${index}.endYear`, {
                         required: "End year is required",
+                        validate: (value, allValues) => {
+                          const start = allValues.experience[index].startYear;
+                          if (!value) return "End year is required";
+                          if (start && Number(value) < Number(start)) {
+                            return "End year cannot be earlier than start year";
+                          }
+                          return true;
+                        },
                       })}
-                      className="appearance-none w-full py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 disabled:opacity-50"
+                      className={`appearance-none outline-none focus:ring focus:ring-blue-300 w-full py-2 ps-4 pe-8 border border-blue-700 bg-blue-700/10 rounded-[32px] text-blue-300 disabled:opacity-50 ${
+                        errors.experience?.[index]?.endYear &&
+                        "border-red-500 focus:ring-red-300"
+                      }`}
                     >
                       <option value="">Select year</option>
                       {yearOptions.map((year) => (
@@ -237,20 +255,27 @@ export default function Experience() {
               </div>
             </div>
           ))}
+          <div className="btn mt-8 flex justify-end gap-2">
+            <Btn
+              text={"Back"}
+              icon={<NextIcon className="w-4 h-4" />}
+              link="/register/education"
+              rotate={true}
+            />
+            <button
+              type="submit"
+              disabled={!isValid || isSubmitting}
+              className={`w-[max-content] py-2 px-8 text-xs md:text-md rounded-[32px] flex items-center gap-2 text-rose-100 border border-blue-700 transition-all duration-200 ease-in-out ${
+                !isValid
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-700 hover:bg-blue-600"
+              }`}
+            >
+              <span>Next</span>
+              <NextIcon className="w-4 h-4" />
+            </button>
+          </div>
         </form>
-      </div>
-      <div className="btn mt-8 flex justify-end gap-2">
-        <Btn
-          text={"Back"}
-          icon={<NextIcon className="w-4 h-4" />}
-          link="/register/experience"
-          rotate={true}
-        />
-        <Btn
-          text={"Next"}
-          icon={<NextIcon className="w-4 h-4" />}
-          link="/register/user-photo"
-        />
       </div>
     </div>
   );
